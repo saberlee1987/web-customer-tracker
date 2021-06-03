@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Home Page</title>
+    <link rel="stylesheet" th:href="@{/resources/css/bootstrap.css}">
+    <link rel="stylesheet" th:href="@{/resources/css/home.css}">
+</head>
+<!--/*@thymesVar id="name" type="java.lang.String"*/-->
+<!--/*@thymesVar id="family" type="java.lang.String"*/-->
+<!--/*@thymesVar id="colors" type="java.util.List<java.lang.String>"*/-->
+<body>
+<h3>Hello World</h3>
+<h4>Home Page</h4>
+<h4> Hello
+    <th th:text="${name}">name</th>
+    <th th:text="${family}">name</th>
+</h4>
+<table class="table table-striped table-hover" >
+     <tr>
+        <th>colors</th>
+    </tr>
+
+    <tr th:each="color:${colors}">
+        <th th:text="${color}">colorName</th>
+    </tr>
+</table>
+</body>
+</html>
