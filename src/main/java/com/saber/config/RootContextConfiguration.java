@@ -41,6 +41,7 @@ public class RootContextConfiguration {
         return dataSource;
     }
 
+
     @Bean
     public DataSource dataSource2()  {
         JndiDataSourceLookup dataSourceLookup= new JndiDataSourceLookup();
