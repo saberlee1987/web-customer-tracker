@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <link rel="stylesheet" th:href="@{/resources/css/bootstrap.css}">
+    <link rel="stylesheet" th:href="@{/resources/css/home.css}">
+</head>
+<body>
+<!--/*@thymesVar id="customers" type="java.util.List<com.saber.site.entities.CustomerEntity>"*/-->
+<!--/*@thymesVar id="customer" type="com.saber.site.entities.CustomerEntity"*/-->
+
+    <h4>List Customers</h4>
+<table>
+    <tr>
+        <th>FirstName</th>
+        <th>LastName</th>
+        <th>Email</th>
+    </tr>
+    <tr th:each="customer:${customers}">
+        <td th:text="${customer.getFirstName()}"></td>
+        <td th:text="${customer.getLastName()}"></td>
+        <td th:text="${customer.getEmail()()}"></td>
+    </tr>
+</table>
+</body>
+</html>
