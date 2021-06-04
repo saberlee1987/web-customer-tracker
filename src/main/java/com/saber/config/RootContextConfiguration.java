@@ -95,8 +95,6 @@ public class RootContextConfiguration {
         entityManagerFactoryBean.setJpaProperties(hibernateProperties());
         return entityManagerFactoryBean;
     }
-
-
     @Bean
     public PlatformTransactionManager transactionManager() throws PropertyVetoException {
         JpaTransactionManager transactionManager= new JpaTransactionManager();
