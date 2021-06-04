@@ -84,6 +84,8 @@ public class RootContextConfiguration {
         return properties;
     }
 
+
+
     @Bean(value = "entityManagerJPa")
     public LocalContainerEntityManagerFactoryBean entityManagerFactoryBean() throws PropertyVetoException {
         LocalContainerEntityManagerFactoryBean entityManagerFactoryBean= new LocalContainerEntityManagerFactoryBean();
