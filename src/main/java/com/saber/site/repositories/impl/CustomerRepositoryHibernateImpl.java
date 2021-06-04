@@ -5,23 +5,19 @@ import com.saber.site.entities.CustomerEntity;
 import com.saber.site.repositories.CustomerRepository;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
-
 import java.util.List;
 
-@Repository
-public class CustomerRepositoryImpl implements CustomerRepository {
+//@Repository(value = "customerRepositoryHibernate")
 
-//    private final EntityManager entityManager;
-//
-//    public CustomerRepositoryImpl(EntityManager entityManager) {
-//        this.entityManager = entityManager;
-//    }
+public class CustomerRepositoryHibernateImpl implements CustomerRepository {
+
 
     private SessionFactory sessionFactory;
 
-    public CustomerRepositoryImpl(SessionFactory sessionFactory) {
+    public CustomerRepositoryHibernateImpl(@Qualifier(value = "hibernateSessionFactory") SessionFactory sessionFactory) {
         this.sessionFactory = sessionFactory;
     }
 
@@ -30,7 +26,6 @@ public class CustomerRepositoryImpl implements CustomerRepository {
     @Transactional
     public CustomerEntity saveCustomer(CustomerDto customerDto) {
         CustomerEntity customerEntity = createCustomerEntity(customerDto);
-        //entityManager.persist(customerEntity);
         Session session = sessionFactory.getCurrentSession();
         session.save(customerEntity);
         return customerEntity;
@@ -41,15 +36,13 @@ public class CustomerRepositoryImpl implements CustomerRepository {
     public List<CustomerEntity> findAllCustomers() {
 
         Session session =sessionFactory.getCurrentSession();
-        //return this.entityManager.createNamedQuery("CustomerEntity.findAll", CustomerEntity.class).getResultList();
         return session.createNamedQuery("CustomerEntity.findAll", CustomerEntity.class).getResultList();
     }
 
     @Override
     @Transactional
     public CustomerEntity findCustomerById(Integer id) {
-//        return this.entityManager.createNamedQuery("CustomerEntity.findById",CustomerEntity.class)
-//                .setParameter("id",id).getSingleResult();
+
         Session session =sessionFactory.getCurrentSession();
         return session.createNamedQuery("CustomerEntity.findById",CustomerEntity.class)
                 .setParameter("id",id).getSingleResult();
@@ -69,7 +62,6 @@ public class CustomerRepositoryImpl implements CustomerRepository {
 
         Session session =sessionFactory.getCurrentSession();
 
-//        entityManager.persist(customerEntity);
         session.save(customerEntity);
 
         return customerEntity;

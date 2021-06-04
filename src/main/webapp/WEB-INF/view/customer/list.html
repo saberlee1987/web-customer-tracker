@@ -11,16 +11,16 @@
 <!--/*@thymesVar id="customer" type="com.saber.site.entities.CustomerEntity"*/-->
 
     <h4>List Customers</h4>
-<table>
+<table class="table table-striped table-hover">
     <tr>
         <th>FirstName</th>
         <th>LastName</th>
         <th>Email</th>
     </tr>
     <tr th:each="customer:${customers}">
-        <td th:text="${customer.getFirstName()}"></td>
-        <td th:text="${customer.getLastName()}"></td>
-        <td th:text="${customer.getEmail()()}"></td>
+        <td th:text="${customer.getFirstName()}">firstName</td>
+        <td th:text="${customer.getLastName()}">LastName</td>
+        <td th:text="${customer.getEmail()}">email</td>
     </tr>
 </table>
 </body>
