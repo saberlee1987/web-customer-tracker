@@ -9,23 +9,34 @@
 <body>
 <!--/*@thymesVar id="customers" type="java.util.List<com.saber.site.entities.CustomerEntity>"*/-->
 <!--/*@thymesVar id="customer" type="com.saber.site.entities.CustomerEntity"*/-->
+<!--/*@thymesVar id="message" type="java.lang.String"*/-->
 
 <nav class="navbar navbar-expand-lg navbar-light bg-light">
     <a class="nav-item nav-link active" th:href="@{/customer/save}">Add Customer</a>
+    <a class="nav-item nav-link active" th:href="@{/customer/list}">List Customer</a>
 </nav>
 
     <h4>List Customers</h4>
-<table class="table table-striped table-hover">
-    <tr>
-        <th>FirstName</th>
-        <th>LastName</th>
-        <th>Email</th>
-    </tr>
-    <tr th:each="customer:${customers}">
-        <td th:text="${customer.getFirstName()}">firstName</td>
-        <td th:text="${customer.getLastName()}">LastName</td>
-        <td th:text="${customer.getEmail()}">email</td>
-    </tr>
-</table>
+    <th:block th:if="${message != null}">
+        <h3 th:text="${message}"></h3>
+    </th:block>
+
+<th:block th:if="${customers!=null}">
+    <table class="table table-striped table-hover">
+        <tr>
+            <th>FirstName</th>
+            <th>LastName</th>
+            <th>Email</th>
+            <th>Update</th>
+        </tr>
+        <tr th:each="customer:${customers}">
+            <td th:text="${customer.getFirstName()}">firstName</td>
+            <td th:text="${customer.getLastName()}">LastName</td>
+            <td th:text="${customer.getEmail()}">email</td>
+            <td><a class="nav-item nav-link active" th:href="@{/customer/update/{id}(id=${customer.getId()})}">update</a> </td>
+        </tr>
+    </table>
+</th:block>
+
 </body>
 </html>

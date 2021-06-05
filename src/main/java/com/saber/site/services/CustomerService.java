@@ -8,7 +8,7 @@ import java.util.List;
 public interface CustomerService {
     CustomerEntity saveCustomer(CustomerDto customerDto);
     List<CustomerEntity> findAllCustomers();
-    CustomerEntity findCustomerById(Integer id);
+    CustomerDto findCustomerById(Integer id);
     CustomerEntity updateCustomer(Integer id,CustomerDto customerDto);
     boolean deleteCustomerById(Integer id);
 }

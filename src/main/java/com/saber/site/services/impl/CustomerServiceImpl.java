@@ -29,8 +29,20 @@ public class CustomerServiceImpl implements CustomerService {
     }
 
     @Override
-    public CustomerEntity findCustomerById(Integer id) {
-        return this.customerRepository.findCustomerById(id);
+    public CustomerDto findCustomerById(Integer id) {
+        try {
+            CustomerEntity customerEntity= this.customerRepository.findCustomerById(id);
+            if (customerEntity==null)
+                return null;
+            CustomerDto customerDto = new CustomerDto();
+            customerDto.setEmail(customerEntity.getEmail());
+            customerDto.setFirstName(customerEntity.getFirstName());
+            customerDto.setLastName(customerEntity.getLastName());
+            return customerDto;
+        }catch (Exception ex){
+            return null;
+        }
+
     }
 
     @Override

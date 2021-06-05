@@ -8,6 +8,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.servlet.view.RedirectView;
@@ -49,5 +50,28 @@ public class CustomerController {
             return new RedirectView("/customer/error",true,false);
         }
 
+    }
+    @GetMapping(value = "/update/{id}")
+    public String updateCustomer(Model model,@PathVariable(name = "id") Integer id){
+        CustomerDto customer = this.customerService.findCustomerById(id);
+        if (customer!=null){
+            model.addAttribute("customer",customer);
+            model.addAttribute("id",id);
+            return "customer/update";
+        }
+        else{
+            model.addAttribute("message", String.format("Customer With This id %d does not exits", id));
+            return "customer/list";
+        }
+
+    }
+    @PostMapping(value = "/update/{id}")
+    public RedirectView updateCustomer(@PathVariable(name = "id") Integer id,CustomerDto customerDto,Model model){
+        CustomerEntity customerEntity = this.customerService.updateCustomer(id, customerDto);
+        if (customerEntity==null){
+            return new RedirectView("/customer/error",true,false);
+        }else{
+            return new RedirectView("/customer/list",true,false);
+        }
     }
 }
