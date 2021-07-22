@@ -1,5 +1,7 @@
 package com.saber.site.controllers;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -10,6 +12,7 @@ import java.util.List;
 @Controller
 public class HomeController {
 
+    private static final Logger log = LoggerFactory.getLogger(HomeController.class);
     @GetMapping(value = {"/", "/home"})
     public String homePage(Model model) {
         model.addAttribute("name", "Saber");
@@ -24,7 +27,7 @@ public class HomeController {
         colors.add("yellow");
         colors.add("pink");
         model.addAttribute("colors",colors);
-        System.out.println("home method called ...............");
+        log.info("home method called ...............");
         return "home";
     }
 }

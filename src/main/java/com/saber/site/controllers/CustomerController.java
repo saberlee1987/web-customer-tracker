@@ -32,7 +32,7 @@ public class CustomerController {
     public String listCustomers(Model model){
         List<CustomerEntity> customerEntityList = customerService.findAllCustomers();
         log.info("customers === {}",customerEntityList);
-        System.out.println("customers ===> "+customerEntityList);
+        log.info("customers ===> "+customerEntityList);
         model.addAttribute("customers",customerEntityList);
         return "customer/list";
     }
@@ -43,6 +43,7 @@ public class CustomerController {
     }
     @PostMapping(value = "/save")
     public RedirectView saveCustomer(CustomerDto customerDto){
+        log.info("Request for add new Customer ==> {}",customerDto);
         CustomerEntity customerEntity = this.customerService.saveCustomer(customerDto);
         if (customerEntity!=null){
             return new RedirectView("/customer/list",true,false);
