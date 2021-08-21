@@ -28,12 +28,14 @@
             <th>LastName</th>
             <th>Email</th>
             <th>Update</th>
+            <th>Delete</th>
         </tr>
         <tr th:each="customer:${customers}">
             <td th:text="${customer.getFirstName()}">firstName</td>
             <td th:text="${customer.getLastName()}">LastName</td>
             <td th:text="${customer.getEmail()}">email</td>
             <td><a class="nav-item nav-link active" th:href="@{/customer/update/{id}(id=${customer.getId()})}">update</a> </td>
+            <td><a class="nav-item nav-link active" th:href="@{/customer/delete/{id}(id=${customer.getId()})}">Delete</a> </td>
         </tr>
     </table>
 </th:block>

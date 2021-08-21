@@ -6,6 +6,8 @@ import com.saber.site.repositories.CustomerRepository;
 import com.saber.site.services.CustomerService;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+
 import java.util.List;
 
 @Service
@@ -19,16 +21,19 @@ public class CustomerServiceImpl implements CustomerService {
 
 
     @Override
+    @Transactional
     public CustomerEntity saveCustomer(CustomerDto customerDto) {
         return this.customerRepository.saveCustomer(customerDto);
     }
 
     @Override
+    @Transactional
     public List<CustomerEntity> findAllCustomers() {
         return this.customerRepository.findAllCustomers();
     }
 
     @Override
+    @Transactional
     public CustomerDto findCustomerById(Integer id) {
         try {
             CustomerEntity customerEntity= this.customerRepository.findCustomerById(id);
@@ -46,12 +51,14 @@ public class CustomerServiceImpl implements CustomerService {
     }
 
     @Override
+    @Transactional
     public CustomerEntity updateCustomer(Integer id, CustomerDto customerDto) {
         return this.customerRepository.updateCustomer(id,customerDto);
     }
 
     @Override
+    @Transactional
     public boolean deleteCustomerById(Integer id) {
-        return false;
+        return customerRepository.deleteCustomerById(id);
     }
 }

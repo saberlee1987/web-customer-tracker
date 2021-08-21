@@ -3,6 +3,8 @@ package com.saber.site.repositories.impl;
 import com.saber.site.dto.CustomerDto;
 import com.saber.site.entities.CustomerEntity;
 import com.saber.site.repositories.CustomerRepository;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -13,12 +15,12 @@ import java.util.List;
 @Repository(value = "customerRepositoryJpa")
 public class CustomerRepositoryJpaImpl implements CustomerRepository {
 
+    private static  final Logger log = LoggerFactory.getLogger(CustomerRepositoryJpaImpl.class);
     @PersistenceContext
-    private  EntityManager entityManager;
+    private EntityManager entityManager;
 
 
     @Override
-    @Transactional
     public CustomerEntity saveCustomer(CustomerDto customerDto) {
         CustomerEntity customerEntity = createCustomerEntity(customerDto);
         entityManager.persist(customerEntity);
@@ -26,22 +28,19 @@ public class CustomerRepositoryJpaImpl implements CustomerRepository {
     }
 
     @Override
-    @Transactional
     public List<CustomerEntity> findAllCustomers() {
 
         return this.entityManager.createNamedQuery("CustomerEntity.findAll", CustomerEntity.class).getResultList();
     }
 
     @Override
-    @Transactional
     public CustomerEntity findCustomerById(Integer id) {
-        return this.entityManager.createNamedQuery("CustomerEntity.findById",CustomerEntity.class)
-                .setParameter("id",id).getSingleResult();
+        return this.entityManager.createNamedQuery("CustomerEntity.findById", CustomerEntity.class)
+                .setParameter("id", id).getSingleResult();
     }
 
     @Override
-    @Transactional
-    public CustomerEntity updateCustomer(Integer id ,CustomerDto customerDto) {
+    public CustomerEntity updateCustomer(Integer id, CustomerDto customerDto) {
 
         CustomerEntity customerEntity = findCustomerById(id);
         if (customerEntity == null)
@@ -57,9 +56,18 @@ public class CustomerRepositoryJpaImpl implements CustomerRepository {
     }
 
     @Override
-    @Transactional
     public boolean deleteCustomerById(Integer id) {
-        return false;
+        CustomerEntity customerEntity = findCustomerById(id);
+        if (customerEntity == null)
+            return false;
+        try {
+            this.entityManager.remove(customerEntity);
+            return true;
+        } catch (Exception ex) {
+            log.error("Error when deleting customer by id {} ===> {} ",id,ex.getMessage());
+            return false;
+        }
+
     }
 
 

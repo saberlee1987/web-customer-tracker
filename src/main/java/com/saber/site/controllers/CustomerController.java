@@ -75,4 +75,15 @@ public class CustomerController {
             return new RedirectView("/customer/list",true,false);
         }
     }
+
+    @GetMapping(value = "/delete/{id}")
+    public RedirectView deleteCustomer(Model model,@PathVariable(name = "id") Integer id){
+        log.info("Delete Customer with id == {} ",id);
+        boolean result = customerService.deleteCustomerById(id);
+        if (result){
+            return new  RedirectView("/customer/list",true,false);
+        }else{
+            return new RedirectView("/customer/error",true,false);
+        }
+    }
 }
