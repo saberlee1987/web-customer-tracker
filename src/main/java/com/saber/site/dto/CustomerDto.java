@@ -1,11 +1,17 @@
 package com.saber.site.dto;
 
+import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.Pattern;
 import java.io.Serializable;
 import java.util.Objects;
 
 public class CustomerDto implements Serializable {
+    @NotBlank(message = "{firstName.required}")
     private String firstName;
+    @NotBlank(message = "{lastName.required}")
     private String lastName;
+    @NotBlank(message = "{email.required}")
+    @Pattern(regexp = "^\\w+@[a-zA-Z_]+?\\.[a-zA-Z]{2,3}$",message = "{email.valid}")
     private String email;
 
     public String getFirstName() {

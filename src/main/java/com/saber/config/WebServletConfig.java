@@ -1,11 +1,14 @@
 package com.saber.config;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.MessageSource;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.support.ResourceBundleMessageSource;
 import org.springframework.stereotype.Controller;
+import org.springframework.validation.Validator;
+import org.springframework.validation.beanvalidation.SpringValidatorAdapter;
 import org.springframework.web.servlet.ViewResolver;
 import org.springframework.web.servlet.config.annotation.EnableWebMvc;
 import org.springframework.web.servlet.config.annotation.ResourceHandlerRegistry;
@@ -14,10 +17,8 @@ import org.thymeleaf.spring5.SpringTemplateEngine;
 import org.thymeleaf.spring5.view.ThymeleafViewResolver;
 import org.thymeleaf.templatemode.TemplateMode;
 import org.thymeleaf.templateresolver.ServletContextTemplateResolver;
-
 import javax.servlet.ServletContext;
 import java.nio.charset.StandardCharsets;
-import java.util.ResourceBundle;
 
 @Configuration
 @EnableWebMvc
@@ -28,14 +29,11 @@ import java.util.ResourceBundle;
 )
 public class WebServletConfig implements WebMvcConfigurer {
 
-    @Bean
-    public ResourceBundleMessageSource messageSource(){
-        ResourceBundleMessageSource messageSource = new ResourceBundleMessageSource();
-        messageSource.setCacheMillis(-1);
-        messageSource.setDefaultEncoding(StandardCharsets.UTF_8.name());
-        messageSource.setBasenames("messages");
-        return messageSource;
-    }
+    @Autowired
+    private SpringValidatorAdapter validatorAdapter;
+
+    @Autowired
+    private MessageSource messageSource;
 
     @Bean
     @Autowired
@@ -51,7 +49,7 @@ public class WebServletConfig implements WebMvcConfigurer {
     public SpringTemplateEngine templateEngine(ServletContext servletContext){
         SpringTemplateEngine templateEngine = new SpringTemplateEngine();
         templateEngine.setTemplateResolver(templateResolver(servletContext));
-        templateEngine.setMessageSource(messageSource());
+        templateEngine.setMessageSource(messageSource);
         return templateEngine;
     }
 
@@ -66,5 +64,10 @@ public class WebServletConfig implements WebMvcConfigurer {
     @Override
     public void addResourceHandlers(ResourceHandlerRegistry registry) {
         registry.addResourceHandler("/resources/**").addResourceLocations("/resources/");
+    }
+
+    @Override
+    public Validator getValidator() {
+        return this.validatorAdapter;
     }
 }

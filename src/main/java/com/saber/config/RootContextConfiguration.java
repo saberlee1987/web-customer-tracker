@@ -1,9 +1,12 @@
 package com.saber.config;
 
 import com.mchange.v2.c3p0.ComboPooledDataSource;
+import org.hibernate.validator.HibernateValidator;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.context.support.ResourceBundleMessageSource;
 import org.springframework.jdbc.datasource.lookup.JndiDataSourceLookup;
 import org.springframework.orm.hibernate5.HibernateTransactionManager;
 import org.springframework.orm.hibernate5.LocalSessionFactoryBean;
@@ -15,10 +18,14 @@ import org.springframework.orm.jpa.vendor.HibernateJpaVendorAdapter;
 import org.springframework.stereotype.Controller;
 import org.springframework.transaction.PlatformTransactionManager;
 import org.springframework.transaction.annotation.EnableTransactionManagement;
+import org.springframework.validation.beanvalidation.LocalValidatorFactoryBean;
+import org.springframework.validation.beanvalidation.SpringValidatorAdapter;
+
 import javax.persistence.SharedCacheMode;
 import javax.persistence.ValidationMode;
 import javax.sql.DataSource;
 import java.beans.PropertyVetoException;
+import java.nio.charset.StandardCharsets;
 import java.util.Properties;
 
 
@@ -27,6 +34,17 @@ import java.util.Properties;
         , excludeFilters = @ComponentScan.Filter(Controller.class))
 @EnableTransactionManagement
 public class RootContextConfiguration {
+
+
+
+    @Bean
+    public ResourceBundleMessageSource messageSource(){
+        ResourceBundleMessageSource messageSource = new ResourceBundleMessageSource();
+        messageSource.setCacheMillis(-1);
+        messageSource.setDefaultEncoding(StandardCharsets.UTF_8.name());
+        messageSource.setBasenames("messages","validations");
+        return messageSource;
+    }
 
     @Bean
     public DataSource dataSource() throws PropertyVetoException {
@@ -103,4 +121,11 @@ public class RootContextConfiguration {
         transactionManager.setEntityManagerFactory(entityManagerFactoryBean().getObject());
         return transactionManager;
     }
+    @Bean
+    public LocalValidatorFactoryBean validatorFactoryBean(){
+        LocalValidatorFactoryBean validatorFactoryBean = new LocalValidatorFactoryBean();
+        validatorFactoryBean.setValidationMessageSource(messageSource());
+        return validatorFactoryBean;
+    }
+
 }

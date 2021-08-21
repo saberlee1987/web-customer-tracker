@@ -4,6 +4,7 @@
     <meta charset="UTF-8">
     <title>Update Customer Page</title>
     <link rel="stylesheet" th:href="@{/resources/css/bootstrap.css}">
+    <link rel="stylesheet" th:href="@{/resources/css/app.css}">
 </head>
 <body>
 <nav class="navbar navbar-expand-lg navbar-light bg-light">
@@ -11,7 +12,13 @@
 </nav>
 <!--/*@thymesVar id="customer" type="com.saber.site.dto.CustomerDto"*/-->
 <!--/*@thymesVar id="id" type="java.lang.Integer"*/-->
+<!--/*@thymesVar id="errors" type="java.util.List<springframework.validation.FieldError>"*/-->
     <h3>Update Customer Page</h3>
+    <th:block th:if="${errors!=null}">
+        <ul th:each="error:${errors}">
+            <li class="error" th:text="${error.getDefaultMessage()}"></li>
+        </ul>
+    </th:block>
     <th:block th:if="${customer!=null}">
 
         <div class="container">

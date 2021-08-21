@@ -7,11 +7,18 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.validation.Errors;
+import org.springframework.validation.FieldError;
+import org.springframework.validation.ObjectError;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.servlet.ModelAndView;
+import org.springframework.web.servlet.View;
 import org.springframework.web.servlet.view.RedirectView;
+
+import javax.validation.Valid;
 import java.util.List;
 
 @Controller
@@ -42,13 +49,23 @@ public class CustomerController {
         return "customer/save";
     }
     @PostMapping(value = "/save")
-    public RedirectView saveCustomer(CustomerDto customerDto){
+    public ModelAndView saveCustomer(@Valid CustomerDto customerDto, Errors errors,Model model){
         log.info("Request for add new Customer ==> {}",customerDto);
+        if (errors.hasErrors()){
+            List<FieldError> errorsList = errors.getFieldErrors();
+            for (FieldError fieldError :errorsList){
+                log.error("field {} ===> {}",fieldError.getField(),fieldError.getDefaultMessage());
+            }
+            model.addAttribute("customer",customerDto);
+            model.addAttribute("errors",errorsList);
+            return new ModelAndView("customer/save");
+
+        }
         CustomerEntity customerEntity = this.customerService.saveCustomer(customerDto);
         if (customerEntity!=null){
-            return new RedirectView("/customer/list",true,false);
+            return new ModelAndView( new RedirectView("/customer/list",true,false));
         }else{
-            return new RedirectView("/customer/error",true,false);
+            return new ModelAndView(new RedirectView("/customer/error",true,false));
         }
 
     }
@@ -67,12 +84,24 @@ public class CustomerController {
 
     }
     @PostMapping(value = "/update/{id}")
-    public RedirectView updateCustomer(@PathVariable(name = "id") Integer id,CustomerDto customerDto,Model model){
+    public ModelAndView updateCustomer(@PathVariable(name = "id") Integer id, @Valid CustomerDto customerDto, Errors errors,Model model){
+
+        if (errors.hasErrors()){
+            List<FieldError> errorsList = errors.getFieldErrors();
+            for (FieldError fieldError :errorsList){
+                log.error("field {} ===> {}",fieldError.getField(),fieldError.getDefaultMessage());
+            }
+            model.addAttribute("customer",customerDto);
+            model.addAttribute("errors",errorsList);
+            model.addAttribute("id",id);
+            return new ModelAndView("customer/update");
+        }
+
         CustomerEntity customerEntity = this.customerService.updateCustomer(id, customerDto);
         if (customerEntity==null){
-            return new RedirectView("/customer/error",true,false);
+            return new ModelAndView( new RedirectView("/customer/error",true,false));
         }else{
-            return new RedirectView("/customer/list",true,false);
+            return new ModelAndView( new RedirectView("/customer/list",true,false));
         }
     }
 
